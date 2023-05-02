@@ -40,7 +40,7 @@ def max_flow(G: nx.DiGraph, s, t):
 				if dfs(v):
 					return True
 		path.pop()
-		vis[u] = False
+		# vis[u] = False
 		return False
 
 	w = 0
@@ -59,7 +59,7 @@ def max_flow(G: nx.DiGraph, s, t):
 		ans *= 2
 		w -= 1
 		while True:
-			for u in path:
+			for u in R:
 				vis[u] = False
 			path = []
 			if dfs(s) == True:
