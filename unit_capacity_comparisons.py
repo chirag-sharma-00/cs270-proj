@@ -15,8 +15,8 @@ for i, Alg in enumerate(Algs):
     barbell_vals = []
     for n in np.arange(2, 256, 2):
         U = 1
-        if alg_names[i] == "FF" and n >= 16: #FF takes forever for n >= 16 for some reason
-            break
+        #if alg_names[i] == "FF" and n >= 16: #FF takes forever for n >= 16 for some reason
+        #    break
         G, s, t = graph_classes.complete_graph(n)
         m = len(G.edges)
         theoretical = m * n * U

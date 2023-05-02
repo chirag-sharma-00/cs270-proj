@@ -3,6 +3,7 @@ from networkx.algorithms.flow.utils import build_residual_network
 from scipy.optimize import linprog
 
 def max_flow(G: nx.DiGraph, s, t):
+	return 0
 	ans = 0
 	R = build_residual_network(G, "capacity")
 	path = []

@@ -5,34 +5,35 @@ from scipy.optimize import linprog
 # vertex index should be other than 0
 
 def max_flow(G: nx.DiGraph, s, t):
+	Null = -1
 	ans = 0
 	R = build_residual_network(G, "capacity")
 	dist = {}
-	lsn = {0 : 0}
-	rsn = {0 : 0}
-	val = {0 : R.graph["inf"]}
-	add = {0 : 0}
-	mn = {0 : R.graph["inf"]}
-	argmn = {0: 0}
+	lsn = {Null : Null}
+	rsn = {Null : Null}
+	val = {Null : R.graph["inf"]}
+	add = {Null : 0}
+	mn = {Null : R.graph["inf"]}
+	argmn = {Null: 0}
 	Id = {}
-	fa = {0: 0}
+	fa = {Null: Null}
 	for u in R:
-		lsn[u] = 0
-		rsn[u] = 0
+		lsn[u] = Null
+		rsn[u] = Null
 		val[u] = R.graph["inf"]
 		add[u] = 0
 		mn[u] = R.graph["inf"]
 		argmn[u] = None
 		Id[u] = None
-		fa[u] = 0 
+		fa[u] = Null 
 		for e in R[u].values():
 			e["flow"] = 0
 
 	def Top(x):
-		return (not fa[x]) or (lsn[fa[x]]!=x) and (rsn[fa[x]]!=x)
+		return (fa[x] == Null) or (lsn[fa[x]]!=x) and (rsn[fa[x]]!=x)
 
 	def Plus(x, v):
-		if (x == 0):
+		if (x == Null):
 			return
 		add[x] += v
 		val[x] += v
@@ -71,7 +72,7 @@ def max_flow(G: nx.DiGraph, s, t):
 				rsn[z] = x
 		fa[x] = z
 		lsn[y] = rsn[x]
-		if (rsn[x]): fa[rsn[x]] = y
+		if (rsn[x] != Null): fa[rsn[x]] = y
 		rsn[x] = y
 		fa[y] = x
 		Up(y)
@@ -86,7 +87,7 @@ def max_flow(G: nx.DiGraph, s, t):
 				rsn[z] = x
 		fa[x] = z
 		rsn[y] = lsn[x]
-		if (lsn[x]): fa[lsn[x]] = y
+		if (lsn[x] != Null): fa[lsn[x]] = y
 		lsn[x] = y
 		fa[y] = x
 		Up(y)
@@ -127,8 +128,8 @@ def max_flow(G: nx.DiGraph, s, t):
 		Up(x)
 
 	def Access(x):
-		y = 0
-		while (x != 0):
+		y = Null
+		while (x != Null):
 			Splay(x)
 			rsn[x] = y
 			Up(x)
@@ -139,7 +140,7 @@ def max_flow(G: nx.DiGraph, s, t):
 	def Root(x):
 		Access(x)
 		Splay(x)
-		while (lsn[x]):
+		while (lsn[x] != Null):
 			x = lsn[x]
 			Down(x)
 		Splay(x)
@@ -148,17 +149,17 @@ def max_flow(G: nx.DiGraph, s, t):
 	def Cut(x):
 		Access(x)
 		Splay(x)
-		fa[lsn[x]] = 0
-		lsn[x] = 0
+		fa[lsn[x]] = Null
+		lsn[x] = Null
 		Up(x)
 
 	def DeleteZero(x):
 		Down(x)
-		while (rsn[x]) and (mn[rsn[x]] == 0):
+		while (rsn[x]!=Null) and (mn[rsn[x]] == 0):
 			x = argmn[rsn[x]]
 			Splay(x)
-			fa[lsn[x]] = 0
-			lsn[x] = 0
+			fa[lsn[x]] = Null
+			lsn[x] = Null
 			Up(x)
 
 	def dfs(u):
@@ -208,9 +209,9 @@ def max_flow(G: nx.DiGraph, s, t):
 		for u in R:
 			Splay(u)
 			Down(u)
-			lsn[u] = 0
-			rsn[u] = 0
-			fa[u] = 0
+			lsn[u] = Null
+			rsn[u] = Null
+			fa[u] = Null
 			add[u] = 0
 			Id[u] = None
 			val[u] = R.graph["inf"]
