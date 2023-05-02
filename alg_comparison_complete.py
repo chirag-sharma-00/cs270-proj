@@ -8,12 +8,12 @@ import Alg_FF, Alg_EK, Alg_Dinic, Alg_Dinic_LCT
 
 '''comparison between algorithms on complete graphs with unit capacity'''
 
-alg_names = ["FF", "EK", "Dinic"]#, "Dinic_LCT"]
-Algs = [Alg_FF, Alg_EK, Alg_Dinic]#, Alg_Dinic_LCT]
+alg_names = ["FF", "EK", "Dinic", "Dinic_LCT"]
+Algs = [Alg_FF, Alg_EK, Alg_Dinic, Alg_Dinic_LCT]
 
 times = {a: [] for a in alg_names}
 
-for n in np.arange(2, 16, 2):
+for n in np.arange(2, 256, 2):
     U = 1
     G, s, t = graph_classes.complete_graph(n)
     nx.set_edge_attributes(G, 1, name="capacity")
@@ -24,7 +24,7 @@ for n in np.arange(2, 16, 2):
         times[alg_names[i]].append(end - start)
 plt.figure()
 for a in alg_names:
-    plt.plot(np.arange(2, 16, 2), times[a], label=a)
+    plt.plot(np.arange(2, 256, 2), times[a], label=a)
 plt.xlabel("$n$")
 plt.ylabel("Observed runtime (ns)")
 plt.legend()
